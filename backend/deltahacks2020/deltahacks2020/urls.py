@@ -14,13 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+
+1
+2
+3
+4
+5
+6
+7
+8
 from django.conf.urls import url
 from django.contrib import admin
-from django.views.generic.base import TemplateView
-from deltahacks_app.views import *
-
+from django.urls import path, include
+ 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^getData/', get_data),
-    url(r'^.*', TemplateView.as_view(template_name="home.html"), name="home")
+    path('admin/', admin.site.urls),
+    url(r'^', include('data.urls'))
 ]
