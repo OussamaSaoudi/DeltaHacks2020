@@ -8,40 +8,57 @@ import { ApiService } from './api.service';
   providers: [ApiService]
 })
 export class AppComponent {
-  word;
-  time;
-  postData;
-  postTime;
-  data = [{word: '', time: ''}];
-  sendData: [{}]
-  constructor(private api: ApiService){
-    this.getData();
-  }
+  movies = [{title: 'test'}];
+  selectedMovie;
 
-  getData = () => {
-    this.api.getDataPoints().subscribe(
+  constructor(private api: ApiService) {
+    this.getMovies();
+    this.selectedMovie = {id: -1, title: '' , desc: '', year: 0 };
+  }
+  getMovies = () => {
+    this.api.getAllMovies().subscribe(
       data => {
-        this.data = data;
+        this.movies = data;
       },
       error => {
         console.log(error);
       }
     );
   }
-  updateData = () => {
-    this.api.updateData(this.data).subscribe(
+  movieClicked = (movie) => {
+    this.api.getOneMovie(movie.id).subscribe(
       data => {
-        this.data = data;
+        this.selectedMovie = data;
       },
       error => {
         console.log(error);
       }
     );
   }
-  postData = () => {
-    this.api.postData(this.data).subscribe(
+  updateMovie = () => {
+    this.api.updateMovie(this.selectedMovie).subscribe(
       data => {
-        this.data.push(data);
+        this.getMovies();
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+  createMovie = () => {
+    this.api.createMovie(this.selectedMovie).subscribe(
+      data => {
+        this.movies.push(data);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+  deleteMovie = () => {
+    this.api.deleteMovie(this.selectedMovie.id).subscribe(
+      data => {
+        this.getMovies();
       },
       error => {
         console.log(error);
@@ -49,4 +66,3 @@ export class AppComponent {
     );
   }
 }
-

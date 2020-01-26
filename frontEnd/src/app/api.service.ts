@@ -1,24 +1,37 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  baseurl = "";
-  httpHeaders = new HttpHeaders({'Content-type': 'application/json'});
+
+  baseurl = "http://127.0.0.1:8000";
+  httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
+
   constructor(private http: HttpClient) { }
 
-  getDataPoints(): Observable<any> {
-    return this.http.get(this.baseurl + '/data/', {
-      headers: this.httpHeaders
-    });
+  getAllMovies(): Observable<any> {
+    return this.http.get(this.baseurl + '/movies/',
+    {headers: this.httpHeaders});
   }
-  updateData(data): Observable<any> {
-    const input = {word: data.word, time: data.time }
-    return this.http.put(this.baseurl + '/data/', input, {
-      headers: this.httpHeaders
-    });
+  getOneMovie(id): Observable<any> {
+    return this.http.get(this.baseurl + '/movies/' + id + '/',
+    {headers: this.httpHeaders});
   }
-
+  updateMovie(movie): Observable<any> {
+    const body = {title: movie.title , desc: movie.desc, year: movie.year };
+    return this.http.put(this.baseurl + '/movies/' + movie.id + '/', body,
+    {headers: this.httpHeaders});
+  }
+  createMovie(movie): Observable<any> {
+    const body = {title: movie.title , desc: movie.desc, year: movie.year };
+    return this.http.post(this.baseurl + '/movies/', body,
+    {headers: this.httpHeaders});
+  }
+  deleteMovie(id): Observable<any> {
+    return this.http.delete(this.baseurl + '/movies/' + id + '/',
+    {headers: this.httpHeaders});
+  }
 }
